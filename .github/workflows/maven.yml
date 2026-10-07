@@ -21,5 +21,5 @@ jobs:
           distribution: temurin
           cache: maven
       - name: Build, test, Checkstyle, and coverage
-        working-directory: code/Grocery List JavaFX Sample
+        working-directory:  code/Dorm-Messaging-App
         run: mvn --batch-mode --update-snapshots clean verify
