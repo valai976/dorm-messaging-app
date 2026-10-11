@@ -36,4 +36,18 @@ public class AccountRegistry {
         this.accounts.put(normalizedUsername, account);
         return account;
     }
+    
+    /**
+     * Finds an account by its case-sensitive username.
+     *
+     * @param username the username to find
+     * @return the matching account, or null if no account matches
+     */
+    public Account findByUsername(String username) {
+        if (username == null || username.isBlank()) {
+            return null;
+        }
+
+        return this.accounts.get(username.strip());
+    }
 }
