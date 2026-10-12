@@ -84,4 +84,34 @@ public class ReplyService {
                 .thenComparingLong(Reply::getId))
             .toList();
     }
+    /**
+     * Gets a snapshot of all replies for storage.
+     *
+     * @return all stored replies
+     */
+    public List<Reply> getAllReplies() {
+        return List.copyOf(this.replies);
+    }
+
+    /**
+     * Restores a saved reply and advances the next available ID.
+     *
+     * @param reply the reply to restore
+     * @throws IllegalArgumentException if the reply is null, its ID exists,
+     *         or its parent message is unavailable
+     */
+    public void restoreReply(Reply reply) {
+        if (reply == null) {
+            throw new IllegalArgumentException("A reply is required.");
+        }
+        if (!this.messageService.getAllMessages().contains(reply.getParentMessage())) {
+            throw new IllegalArgumentException("The parent message is unavailable.");
+        }
+        if (this.replies.stream().anyMatch(
+            existing -> existing.getId() == reply.getId())) {
+            throw new IllegalArgumentException("The reply ID already exists.");
+        }
+        this.replies.add(reply);
+        this.nextReplyId = Math.max(this.nextReplyId, reply.getId() + 1);
+    }
 }

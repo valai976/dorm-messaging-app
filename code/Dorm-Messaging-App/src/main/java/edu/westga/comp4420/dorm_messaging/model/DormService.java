@@ -66,4 +66,26 @@ public class DormService {
 
         return account;
     }
+    /**
+     * Gets a snapshot of saved dorm selections.
+     *
+     * @return account IDs mapped to selected dorms
+     */
+    public Map<Long, Dorm> getSelections() {
+        return Map.copyOf(this.selections);
+    }
+
+    /**
+     * Restores a resident's saved dorm selection.
+     *
+     * @param accountId the positive resident ID
+     * @param dorm the saved dorm
+     * @throws IllegalArgumentException if the ID or dorm is invalid
+     */
+    public void restoreSelection(long accountId, Dorm dorm) {
+        if (accountId <= 0 || dorm == null) {
+            throw new IllegalArgumentException("A valid account ID and dorm are required.");
+        }
+        this.selections.put(accountId, dorm);
+    }
 }

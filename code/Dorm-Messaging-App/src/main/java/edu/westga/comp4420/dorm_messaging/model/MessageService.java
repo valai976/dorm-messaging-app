@@ -88,4 +88,31 @@ public class MessageService {
                 .reversed())
             .toList();
     }
+    /**
+     * Gets a snapshot of messages across all dorms for storage.
+     *
+     * @return all stored messages
+     */
+    public List<Message> getAllMessages() {
+        return List.copyOf(this.messages);
+    }
+
+    /**
+     * Restores a saved message and advances the next available ID.
+     *
+     * @param message the message to restore
+     * @throws IllegalArgumentException if the message is null or its ID exists
+     */
+    public void restoreMessage(Message message) {
+        if (message == null) {
+            throw new IllegalArgumentException("A message is required.");
+        }
+        if (this.messages.stream().anyMatch(
+            existing -> existing.getId() == message.getId())) {
+            throw new IllegalArgumentException("The message ID already exists.");
+        }
+        this.messages.add(message);
+        this.nextMessageId = Math.max(this.nextMessageId, message.getId() + 1);
+    }
+    
 }
