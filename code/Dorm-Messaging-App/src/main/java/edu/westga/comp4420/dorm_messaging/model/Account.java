@@ -22,10 +22,10 @@ public class Account {
      */
     public Account(long id, String username, String password) {
         if (id <= 0) {
-            throw new IllegalArgumentException("Account ID must be positive.");
+            throw new IllegalArgumentException(" Account ID must be positive.");
         }
         if (username == null || username.isBlank()) {
-            throw new IllegalArgumentException("Username is required.");
+            throw new IllegalArgumentException(" Username is required.");
         }
         this.id = id;
         this.username = username.strip();
@@ -59,5 +59,56 @@ public class Account {
      */
     public boolean matchesPassword(String candidate) {
         return this.credential.matches(candidate);
+    }
+    /**
+     * Gets the encoded credential for local storage.
+     *
+     * @return the encoded salt and password hash
+     */
+    public String getEncodedCredential() {
+        return this.credential.encode();
+    }
+
+    /**
+     * Restores an account from saved values.
+     *
+     * @param id the saved account identifier
+     * @param username the saved username
+     * @param encodedCredential the saved password credential
+     * @return the restored account
+     * @throws IllegalArgumentException if any saved value is invalid
+     */
+    public static Account restore(long id, String username,
+            String encodedCredential) {
+        PasswordCredential credential =
+            PasswordCredential.decode(encodedCredential);
+
+        return new Account(id, username, credential);
+    }
+    /**
+     * Creates an account using an already restored credential.
+     *
+     * @param id the positive account identifier
+     * @param username the nonblank login name
+     * @param credential the restored password credential
+     * @throws IllegalArgumentException if an account value is invalid
+     */
+    private Account(long id, String username,
+            PasswordCredential credential) {
+        if (id <= 0) {
+            throw new IllegalArgumentException(
+                "Account ID must be positive.");
+        }
+        if (username == null || username.isBlank()) {
+            throw new IllegalArgumentException("Username is required.");
+        }
+        if (credential == null) {
+            throw new IllegalArgumentException(
+                "A password credential is required.");
+        }
+
+        this.id = id;
+        this.username = username.strip();
+        this.credential = credential;
     }
 }

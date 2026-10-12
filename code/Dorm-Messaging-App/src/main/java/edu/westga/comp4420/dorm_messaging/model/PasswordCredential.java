@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.util.Base64;
 
 /**
  * Protects a password with a random salt and checks candidate passwords.
@@ -64,4 +65,60 @@ public class PasswordCredential {
             specification.clearPassword();
         }
     }
+    /**
+     * Encodes the salt and password hash for storage.
+     *
+     * @return the versioned credential text
+     */
+    public String encode() {
+        Base64.Encoder encoder = Base64.getEncoder();
+
+        return "1:" + encoder.encodeToString(this.salt)
+            + ":" + encoder.encodeToString(this.passwordHash);
+    }
+
+    /**
+     * Restores a credential without needing the original password.
+     *
+     * @param encoded the saved credential text
+     * @return the restored password credential
+     * @throws IllegalArgumentException if the saved value is invalid
+     */
+    public static PasswordCredential decode(String encoded) {
+        if (encoded == null) {
+            throw new IllegalArgumentException(
+                "A saved credential is required.");
+        }
+
+        String[] parts = encoded.split(":", -1);
+
+        if (parts.length != 3 || !"1".equals(parts[0])) {
+            throw new IllegalArgumentException(
+                "Invalid credential format.");
+        }
+
+        Base64.Decoder decoder = Base64.getDecoder();
+
+        return new PasswordCredential(
+            decoder.decode(parts[1]), decoder.decode(parts[2]));
+    }
+    /**
+     * Restores validated salt and hash bytes from storage.
+     *
+     * @param salt the decoded salt
+     * @param passwordHash the decoded password hash
+     * @throws IllegalArgumentException if the byte lengths are invalid
+     */
+    private PasswordCredential(byte[] salt, byte[] passwordHash) {
+        if (salt.length != SALT_BYTES
+                || passwordHash.length != HASH_BITS / 8) {
+            throw new IllegalArgumentException(
+                "Invalid saved credential length.");
+        }
+
+        this.salt = salt;
+        this.passwordHash = passwordHash;
+    }
+    
+    
 }
