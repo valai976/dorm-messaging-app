@@ -1,51 +1,51 @@
 package edu.westga.comp4420.dorm_messaging;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+
+import edu.westga.comp4420.dorm_messaging.model.AppState;
+import edu.westga.comp4420.dorm_messaging.view.codebehind.DormWindows;
 
 /**
- * Entry point for the program
+ * Starts the dorm messaging application.
  *
- * @author	Comp 4420
- * @version Spring 2025
+ * @author Valai Willie
  */
 public class Main extends Application {
-	public static final String WINDOW_TITLE = "Dorm Messaging App";
-	public static final String MAIN_WINDOW_RESOURCE = "view/codebehind/MainWindow.fxml";
-	
 
-	/**
-	 * JavaFX entry point.
-	 *
-	 * @precondition none
-	 * @postcondition none
-	 *
-	 * @throws IOException
-	 */
-	@Override
-	public void start(Stage primaryStage) throws IOException {
-		Parent parent = FXMLLoader.load(getClass().getResource(Main.MAIN_WINDOW_RESOURCE));
-		Scene scene = new Scene(parent);
-		primaryStage.setTitle(WINDOW_TITLE);
-		primaryStage.setScene(scene);
-		primaryStage.show();
-	}
+    /**
+     * Loads saved data and opens the account window.
+     *
+     * @param primaryStage the initial application window
+     */
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            Path file = Path.of(System.getProperty("user.home"),
+                ".dorm-messaging-app", "data.xml");
+            AppState state = new AppState(file);
+            new DormWindows(state, primaryStage).show();
+        } catch (IOException | IllegalArgumentException exception) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Unable to load saved data");
+            alert.setHeaderText("The application could not open its data file.");
+            alert.setContentText(exception.getMessage());
+            alert.showAndWait();
+            Platform.exit();
+        }
+    }
 
-	/**
-	 * Primary Java entry point.
-	 *
-	 * @precondition none
-	 * @postcondition none
-	 *
-	 * @param args
-	 *            command line arguments
-	 */
-	public static void main(String[] args) {
-		Main.launch(args);
-	}
+    /**
+     * Launches the application.
+     *
+     * @param args command line arguments
+     */
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
 }

@@ -136,7 +136,7 @@ public class CommunityStorage {
     }
 
     private String prefix(String type, int index) {
-        return type + "." + index + ".";
+        return type + '.' + index + '.';
     }
 
     private int count(String type, Properties data) {
