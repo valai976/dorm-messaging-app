@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quickstart Guide | Dorm Messaging App</title>
+</head>
+<body>
+<header><nav aria-label="Main navigation"><a href="index.html">Home</a> | <a href="documentation.html">Documentation</a> | <a href="quickstart.html">Quickstart</a></nav><h1>Quickstart Guide</h1></header>
+<main>
+<h2>Requirements</h2><ul><li>JDK 17 and Maven installed, with Java available to Maven.</li><li>Internet access for the initial Maven dependency downloads.</li><li>A desktop environment to display JavaFX windows.</li></ul><h2>Launch with Maven</h2><ol>
+<li>Clone or download the repository. Select the <strong>dev</strong> branch, which contains the implemented application. The release branch inspected for this guide still contains placeholder code.</li>
+<li>Open a terminal in <code>code/Dorm-Messaging-App</code>, the folder containing <code>pom.xml</code>.</li>
+<li>Run <code>mvn clean verify</code> and wait for <code>BUILD SUCCESS</code>.</li>
+<li>Run <code>mvn javafx:run</code>.</li>
+<li>Wait for the <strong>Dorm Messaging - Accounts</strong> window to open.</li>
+</ol><h2>Launch with Eclipse</h2><ol>
+<li>Open Eclipse and choose <strong>File &gt; Import &gt; Maven &gt; Existing Maven Projects</strong>.</li>
+<li>Choose <code>code/Dorm-Messaging-App</code> as the root directory, select its POM, and finish the import. Skip this step if it is already imported.</li>
+<li>Right-click the imported project and select <strong>Run As &gt; Maven build...</strong>.</li>
+<li>Use <code>clean verify</code> as the Goals value and run it. Wait for a successful build.</li>
+<li>Open Maven build again, set Goals to <code>javafx:run</code>, and click <strong>Run</strong>.</li>
+<li>The Accounts window opens. Create an account or log in.</li>
+</ol><figure><img src="images/accounts.jpg" alt="Dorm Messaging Accounts window with registration and login controls"><figcaption>The first screen after launching the application.</figcaption></figure><h2>First use</h2><p><a href="registration.html">Register</a>, <a href="login.html">log in</a>, then <a href="dorm-selection.html">select a dorm</a>.</p><h2>Local data</h2><p>Saved data is stored in <code>.dorm-messaging-app/data.xml</code> under your user home folder. Keep that file to retain accounts and conversations. If saving fails, use <strong>Retry save</strong> in Accounts or <strong>Save</strong> in Community before closing.</p><p>JavaFX 21 is declared in the POM. The bundled README contains outdated grocery-list and coverage details; the POM sets the included-package coverage minimum to 95%.</p>
+</main>
+<footer><p><a href="documentation.html">Back to documentation</a></p></footer>
+</body>
+</html>
